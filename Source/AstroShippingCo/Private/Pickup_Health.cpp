@@ -36,7 +36,9 @@ void APickup_Health::Interact_Implementation()
 
 void APickup_Health::OnPlayerEnterPickupCollider(UPrimitiveComponent *OverlappedComp, AActor *OtherActor, UPrimitiveComponent *OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult &SweepResult)
 {
-	if (OtherActor->ActorHasTag("Zazi")) {
+	AAstroShippingCoCharacter* Character = Cast<AAstroShippingCoCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0));
+
+	if (OtherActor->ActorHasTag("Zazi") && Character->HealthComponent->CanAddHealth()) {
 		Interact_Implementation();
 
 		if (SoundCue)

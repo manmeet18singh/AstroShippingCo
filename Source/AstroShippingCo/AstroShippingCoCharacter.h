@@ -62,6 +62,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Ability)
 		bool isCurrentlyEquipped;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Ability)
+		bool isPushing;
+
 	//// Get armed status
 	//UFUNCTION(BlueprintPure)	
 	//	bool GetIsEquipped();
@@ -156,12 +159,6 @@ protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	// End of APawn interface
-
-		//Called when our Actor is destroyed during Gameplay.
-	virtual void Destroyed();
-
-	//Call Gamemode class to Restart Player Character.
-	void CallRestartPlayer();
 
 public:
 	/** Returns CameraBoom subobject **/

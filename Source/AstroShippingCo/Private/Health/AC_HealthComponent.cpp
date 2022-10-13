@@ -20,12 +20,16 @@ void UAC_HealthComponent::AddHealth(int value)
 	{
 		currentHealth += value;
 	}
-	else 
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("HEALTH IS FULL!"));
-	}
 }
 
+bool UAC_HealthComponent::CanAddHealth()
+{
+	if (currentHealth < maxHealth)
+	{
+		return true;
+	}
+	return false;
+}
 
  //Called when the game starts
 void UAC_HealthComponent::BeginPlay()

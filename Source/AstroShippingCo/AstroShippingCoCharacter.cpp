@@ -73,8 +73,6 @@ AAstroShippingCoCharacter::AAstroShippingCoCharacter()
 	}
 
 	Reach = 300.0f;
-
-	//characterEquipStatus = false;
 }
 
 void AAstroShippingCoCharacter::Tick(float DeltaTime)
@@ -102,14 +100,9 @@ void AAstroShippingCoCharacter::SetupPlayerInputComponent(class UInputComponent*
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("LookUpRate", this, &AAstroShippingCoCharacter::LookUpAtRate);
 
-	//Sets up an input key action to call Restart Player.
-	PlayerInputComponent->BindAction("Respawn", IE_Pressed, this, &AAstroShippingCoCharacter::CallRestartPlayer);
-
 	// Setup for interact
 	PlayerInputComponent->BindAction("Use", IE_Pressed, this, &AAstroShippingCoCharacter::Interact);
 
-	// Setup for interact
-	//PlayerInputComponent->BindAction("Unequip", IE_Pressed, this, &AAstroShippingCoCharacter::Unequip);
 }
 
 void AAstroShippingCoCharacter::UpdateBattery(int32 Amount)
@@ -157,6 +150,18 @@ bool AAstroShippingCoCharacter::AddItemToInventory(APickup* Item)
 		else if (Item->ActorHasTag(FName("Health")))
 		{
 			Item->Interact_Implementation();
+			//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("PICKED UP HEALTH"));
+			return true;
+		}
+		else if (Item->ActorHasTag(FName("Push")))
+		{
+			//Item->Interact_Implementation();
+			//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("PICKED UP HEALTH"));
+			return true;
+		}
+		else if (Item->ActorHasTag(FName("Throw")))
+		{
+			//Item->Interact_Implementation();
 			//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("PICKED UP HEALTH"));
 			return true;
 		}
@@ -244,7 +249,7 @@ void AAstroShippingCoCharacter::UnequipAtInventorySlot(int32 Slot)
 
 	}
 
-
+	
 }
 
 void AAstroShippingCoCharacter::BeginPlay()
@@ -277,10 +282,12 @@ void AAstroShippingCoCharacter::LookUpAtRate(float Rate)
 
 void AAstroShippingCoCharacter::PlayerJump()
 {
-	Jump();
+	if (!isPushing) {
+		Jump();
 
-	GetWorld()->GetTimerManager().SetTimer(GravityMultiplierTimerHandle, this, &AAstroShippingCoCharacter::GravityMultiplierTimer, 0.1f, true, 0.0f);
-	isJumping = true;
+		GetWorld()->GetTimerManager().SetTimer(GravityMultiplierTimerHandle, this, &AAstroShippingCoCharacter::GravityMultiplierTimer, 0.1f, true, 0.0f);
+		isJumping = true;
+	}
 }
 
 void AAstroShippingCoCharacter::PlayerStopJump()
@@ -323,7 +330,7 @@ void AAstroShippingCoCharacter::FallCheckTimer()
 
 void AAstroShippingCoCharacter::MoveForward(float Value)
 {	
-	if ((Controller != nullptr) && (Value != 0.0f))
+	if ((Controller != nullptr) && (Value != 0.0f) && !isPushing)
 	{
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
@@ -337,7 +344,7 @@ void AAstroShippingCoCharacter::MoveForward(float Value)
 
 void AAstroShippingCoCharacter::MoveRight(float Value)
 {
-	if ( (Controller != nullptr) && (Value != 0.0f) )
+	if ( (Controller != nullptr) && (Value != 0.0f) && !isPushing)
 	{
 		// find out which way is right
 		const FRotator Rotation = Controller->GetControlRotation();
@@ -358,65 +365,6 @@ float AAstroShippingCoCharacter::GetSpeed()
 
 }
 
-//bool AAstroShippingCoCharacter::GetIsEquipped()
-//{
-//	return CurrentEquip;
-//}
-//
-//FString AAstroShippingCoCharacter::GetEquipName()
-//{
-//	return FString(CurrentEquip->PickupName);
-//}
-
-//APickup* AAstroShippingCoCharacter::GetCurrentEquip()
-//{
-//	return CurrentEquip;
-//}
-
-//void AAstroShippingCoCharacter::SetCurrentAbility(TSubclassOf<class AAbility> Ability)
-//{
-//	CurrentAbility = Ability;
-//}
-//
-//void AAstroShippingCoCharacter::SetCurrentEquip(APickup* Item)
-//{
-//	CurrentEquip = Item;
-//}
-
-#pragma endregion
-
-#pragma region Respawn
-void AAstroShippingCoCharacter::Destroyed()
-{
-	Super::Destroyed();
-
-	// Example to bind to OnPlayerDied event in GameMode. 
-	if (UWorld* World = GetWorld())
-	{
-		if (AAstroShippingCoGameMode* GameMode = Cast<AAstroShippingCoGameMode>(World->GetAuthGameMode()))
-		{
-			GameMode->GetOnPlayerDied().Broadcast(this);
-		}
-	}
-}
-
-void AAstroShippingCoCharacter::CallRestartPlayer()
-{
-	//Get a reference to the Pawn Controller.
-	AController* CortollerRef = GetController();
-
-	//Destroy the Player.   
-	Destroy();
-
-		//Get the World and GameMode in the world to invoke its restart player function.
-		if (UWorld* World = GetWorld())
-		{
-			if (AAstroShippingCoGameMode* GameMode = Cast<AAstroShippingCoGameMode>(World->GetAuthGameMode()))
-			{
-				GameMode->RestartPlayer(CortollerRef);
-			}
-		}
-}
 #pragma endregion
 
 #pragma region Interaction

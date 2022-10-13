@@ -22,7 +22,7 @@ protected:
 public:	
 
 	// Unreal Function
-	UFUNCTION(BlueprintNativeEvent)
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 		void Interact();
 
 	// CPP Function

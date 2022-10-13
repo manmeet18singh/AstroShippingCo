@@ -18,7 +18,6 @@ APickup::APickup()
 
 	PickUpCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("PickUpCollider"));
 	PickUpCollider->SetWorldScale3D(FVector(2.0f, 2.0f, 2.0f));
-	PickUpCollider->SetupAttachment(InteractableMesh);
 
 	PickupName = FString("Enter an pickup name here...");
 	InteractableHelpText = FString("Press Use Button");
@@ -33,7 +32,7 @@ APickup::APickup()
 
 void APickup::BeginPlay()
 {
-	InteractableHelpText = FString::Printf(TEXT("%s: Press Use Button."), *PickupName);
+	InteractableHelpText = FString::Printf(TEXT("%s%s"), *PickupName, *InteractableHelpText);
 
 	Super::BeginPlay();
 	if (Floating_CurveFloat)

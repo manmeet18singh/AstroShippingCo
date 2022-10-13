@@ -40,3 +40,12 @@ void AAbility::AbilityReleased_Implementation()
 	GLog->Log("ABILITY BASE: USE() You shouldn't be calling this function!");
 }
 
+UTexture2D* AAbility::GetThumbnail()
+{
+	if (AbilityIcon != NULL)
+	{
+		return AbilityIcon;
+	}
+	else return nullptr;
+}
+

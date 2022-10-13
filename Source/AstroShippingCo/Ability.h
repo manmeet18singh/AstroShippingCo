@@ -40,6 +40,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ability Properties", meta = (AllowPrivateAccess = "true"))
 		int AbilityID;
 
+	// Assume most pickups will have some name
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ability Properties", meta = (AllowPrivateAccess = "true"))
+		FString AbilityName;
+
+	// Assume most pickups will have some icon
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ability Properties", meta = (AllowPrivateAccess = "true"))
+		UTexture2D* AbilityIcon;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ability Properties", meta = (AllowPrivateAccess = "true"))
 		UStaticMeshComponent* AbilityMesh;
 
@@ -60,5 +68,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ability Properties")
 		UAnimMontage* Mon_B;
+
+	/*Gets Thumbnail for a given inventory slot (for inventory hud)*/
+	UFUNCTION(BlueprintPure, Category = "Ability Function")
+		UTexture2D* GetThumbnail();
 
 };

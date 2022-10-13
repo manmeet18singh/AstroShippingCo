@@ -18,6 +18,8 @@ public:
 
 	void AddHealth(int value);
 
+	bool CanAddHealth();
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

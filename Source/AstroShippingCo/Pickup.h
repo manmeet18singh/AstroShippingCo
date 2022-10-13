@@ -58,7 +58,7 @@ public:
 		int32 PickupValue;
 
 	// Assume pickup will happen with collision
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		UShapeComponent* PickUpCollider;
 
 	// Is this an equipable item? 
